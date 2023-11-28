@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">PrakMobileUAS</string>
+    <array name="bioskop">
+        <item>XXI</item>
+        <item>CGV</item>
+        <item>Cineplex</item>
+        <item>Premiere</item>
+        <item>XXI-Dolby Atmos</item>
+    </array>
+    <array name="jenisseat">
+        <item>Regular</item>
+        <item>Executive</item>
+        <item>Couple</item>
+        <item>Premiere</item>
+        <item>Suite</item>
+    </array>
+    <array name="jenispembayaran">
+        <item>GoPay</item>
+        <item>Bank</item>
+        <item>OVO</item>
+        <item>Dana</item>
+    </array>
+    <array name="bank">
+        <item></item>
+        <item>BCA</item>
+        <item>BNI</item>
+        <item>BRI</item>
+        <item>BSI</item>
+        <item>JAGO</item>
+        <item>Mandiri</item>
+        <item>BTN</item>
+    </array>
+</resources>
