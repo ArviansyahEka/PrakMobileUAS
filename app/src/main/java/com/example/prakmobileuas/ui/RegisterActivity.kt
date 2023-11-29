@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.prakmobileuas.R
@@ -26,12 +27,15 @@ class RegisterActivity : AppCompatActivity() {
         val etPassword = findViewById<EditText>(R.id.password)
         val btnRegister = findViewById<Button>(R.id.register_register)
         val btnLogin = findViewById<Button>(R.id.register_login)
+        val spinnerUserType = findViewById<Spinner>(R.id.spinnerUserType)
+
 
         btnRegister.setOnClickListener {
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
+            val userType = spinnerUserType.selectedItem.toString()
 
-            registerUser(username, password)
+            registerUser(username, password, userType)
         }
 
         btnLogin.setOnClickListener {
@@ -41,7 +45,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun registerUser(username: String, password: String) {
+    private fun registerUser(username: String, password: String, userType: String) {
         mAuth.createUserWithEmailAndPassword(username, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -51,23 +55,30 @@ class RegisterActivity : AppCompatActivity() {
                         .build()
                     user?.updateProfile(profileUpdates)
 
-                    // Menambahkan informasi peran ke database Firebase Realtime Database
-                    val role = "user" // Default role, dapat diubah menjadi "admin" jika diperlukan
-                    saveUserRole(user?.uid, role)
+                    // Saving user role to Firebase Realtime Database
+                    saveUserRole(user?.uid, userType)
 
-                    Toast.makeText(this@RegisterActivity, "Registrasi berhasil!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@RegisterActivity, UserActivity::class.java)
+                    Toast.makeText(this@RegisterActivity, "Registration successful!", Toast.LENGTH_SHORT).show()
+
+                    // Redirect based on user type (you might want to customize this)
+                    val intent = if (userType == "Admin") {
+                        Intent(this@RegisterActivity, AdminActivity::class.java)
+                    } else {
+                        Intent(this@RegisterActivity, UserActivity::class.java)
+                    }
+
                     startActivity(intent)
                     finish()
                 } else {
                     if (task.exception is FirebaseAuthUserCollisionException) {
-                        Toast.makeText(this@RegisterActivity, "Email sudah digunakan.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@RegisterActivity, "Email is already in use.", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this@RegisterActivity, "Registrasi gagal. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@RegisterActivity, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
     }
+
 
     private fun saveUserRole(userId: String?, role: String) {
         val databaseReference = FirebaseDatabase.getInstance().getReference("users")

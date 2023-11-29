@@ -96,12 +96,22 @@
                 </EditText>
             </LinearLayout>
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
         </LinearLayout>
+
+        <Spinner
+            android:id="@+id/spinnerUserType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@drawable/container"
+            android:padding="10dp"
+            android:entries="@array/tipe_user" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:background="@drawable/customborder"
             android:id="@+id/register_register"

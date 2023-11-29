@@ -30,4 +30,8 @@
         <item>Mandiri</item>
         <item>BTN</item>
     </array>
+    <array name="tipe_user">
+        <item>Admin</item>
+        <item>user</item>
+    </array>
 </resources>
