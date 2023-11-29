@@ -1,8 +1,8 @@
 package com.example.prakmobileuas.ui
 
-// LoginActivity.kt
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -26,17 +26,18 @@ class LoginActivity : AppCompatActivity() {
 
         val etUsername = findViewById<EditText>(R.id.username)
         val etPassword = findViewById<EditText>(R.id.password)
-        val btnLogin = findViewById<Button>(R.id.login)
-        val btnRegister = findViewById<Button>(R.id.daftar)
+        val btnLogin = findViewById<Button>(R.id.login_login)
+        val btnRegister = findViewById<Button>(R.id.login_daftar)
 
         btnLogin.setOnClickListener {
+            Log.d("LoginActivity", "Login button clicked")
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
-
             loginUser(username, password)
         }
 
         btnRegister.setOnClickListener {
+            Log.d("LoginActivity", "Register button clicked")
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
             finish()
@@ -51,10 +52,10 @@ class LoginActivity : AppCompatActivity() {
                     getUserRoleFromDatabase(user?.uid) { role ->
                         if (role == "admin") {
                             // Pengguna adalah admin, lakukan sesuatu
-                            Toast.makeText(this@LoginActivity, "Login berhasil sebagai Admin!", Toast.LENGTH_SHORT).show()
+                            handleUserRole(role) // Tambahkan ini agar fungsi handleUserRole dipanggil dengan benar
                         } else {
                             // Pengguna adalah pengguna biasa, lakukan sesuatu yang berbeda
-                            Toast.makeText(this@LoginActivity, "Login berhasil sebagai Pengguna!", Toast.LENGTH_SHORT).show()
+                            handleUserRole(role) // Tambahkan ini agar fungsi handleUserRole dipanggil dengan benar
                         }
                     }
                 } else {
@@ -68,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
         val userReference = databaseReference.child(userId ?: "")
         val roleReference = userReference.child("role")
 
-        roleReference.addValueEventListener(object : ValueEventListener {
+        roleReference.addListenerForSingleValueEvent(object : ValueEventListener { // Ganti ke addListenerForSingleValueEvent agar mendapatkan data hanya sekali
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val role = dataSnapshot.getValue(String::class.java)
                 callback.invoke(role)
@@ -85,10 +86,16 @@ class LoginActivity : AppCompatActivity() {
         if (role == "admin") {
             // User is an admin, perform admin actions
             Toast.makeText(this@LoginActivity, "Login berhasil sebagai Admin!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this@LoginActivity, AdminActivity::class.java)
+            startActivity(intent)
+            finish()
+
         } else {
             // User is a regular user, perform user actions
             Toast.makeText(this@LoginActivity, "Login berhasil sebagai Pengguna!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this@LoginActivity, UserActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }
-

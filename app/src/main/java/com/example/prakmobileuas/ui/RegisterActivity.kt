@@ -24,8 +24,8 @@ class RegisterActivity : AppCompatActivity() {
 
         val etUsername = findViewById<EditText>(R.id.username)
         val etPassword = findViewById<EditText>(R.id.password)
-        val btnRegister = findViewById<Button>(R.id.register)
-        val btnLogin = findViewById<Button>(R.id.login)
+        val btnRegister = findViewById<Button>(R.id.register_register)
+        val btnLogin = findViewById<Button>(R.id.register_login)
 
         btnRegister.setOnClickListener {
             val username = etUsername.text.toString().trim()
