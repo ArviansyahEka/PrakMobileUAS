@@ -1,10 +1,30 @@
 {
   "project_info": {
     "project_number": "507370421425",
+    "firebase_url": "https://prakmobileuas-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "prakmobileuas",
     "storage_bucket": "prakmobileuas.appspot.com"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507370421425:android:5a30d55582d9909d733690",
+        "android_client_info": {
+          "package_name": "com.example.prakmobile11tugas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw_M9I9F_FayquPepQk1DbzRrwr9mZ8uQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:507370421425:android:ebcccd24eee90e96733690",

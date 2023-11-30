@@ -1,4 +1,3 @@
-// AdminActivity.kt
 package com.example.prakmobileuas.ui
 
 import android.content.Context
@@ -9,6 +8,7 @@ import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.prakmobileuas.R
+import com.example.prakmobileuas.adapter.FilmMingguIniAdapter
 import com.example.prakmobileuas.database.Film
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -47,7 +47,7 @@ class AdminActivity : AppCompatActivity() {
         listView.setOnItemClickListener { _, _, position, _ ->
             val selectedFilm = filmList[position]
             // Handle the selected film, you can navigate to UpdateDeleteActivity with the selected film's ID
-            val intent = Intent(this, AdminActivity::class.java)
+            val intent = Intent(this, TambahFilmActivity::class.java)
             intent.putExtra("film_judul", selectedFilm.judul)
             intent.putExtra("film_id", selectedFilm.id)
             intent.putExtra("film_sinopsis", selectedFilm.sinopsis)

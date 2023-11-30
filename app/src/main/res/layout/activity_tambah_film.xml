@@ -1,7 +1,10 @@
 <!-- activity_tambah_film.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.TambahFilmActivity">
 
     <EditText
         android:id="@+id/edtJudul"
@@ -13,42 +16,35 @@
         android:id="@+id/edtSinopsis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edtJudul"
         android:hint="Sinopsis" />
 
     <EditText
         android:id="@+id/edtTahun"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edtSinopsis"
         android:hint="Tahun" />
 
     <EditText
         android:id="@+id/edtGenre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edtTahun"
         android:hint="Genre" />
 
     <EditText
         android:id="@+id/edtRating"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edtGenre"
         android:hint="Rating" />
 
-    <EditText
-        android:id="@+id/edtPoster"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/pickImageButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edtRating"
-        android:hint="Poster" />
+        android:text="Pick Image" />
 
     <Button
         android:id="@+id/btnSimpan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edtPoster"
         android:text="Simpan" />
-
-</RelativeLayout>
+</LinearLayout>

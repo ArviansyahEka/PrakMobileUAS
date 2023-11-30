@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,12 @@
         android:theme="@style/Theme.PrakMobileUAS"
         tools:targetApi="31">
         <activity
+            android:name=".ui.DetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".adapter.FilmMingguIniAdapter"
+            android:exported="false" />
+        <activity
             android:name=".ui.TambahFilmActivity"
             android:exported="false" />
         <activity
@@ -24,15 +31,14 @@
             android:name=".ui.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.LoginActivity"
-            android:exported="true"/>
-        <activity
             android:name=".ui.AdminActivity"
-            android:exported="false"/>
-
-            <activity
-                android:name=".ui.UserActivity"
-                android:exported="true" >
+            android:exported="false" />
+        <activity
+            android:name=".ui.UserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <ImageView
+                android:id="@+id/mainphoto"
                 android:layout_width="match_parent"
                 android:layout_height="415dp"
                 android:src="@drawable/thewitcher">
@@ -54,11 +55,12 @@
                         android:text="7.5/10"></TextView>
                 </LinearLayout>
                 <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="90dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/redbutton"
                     android:textColor="@color/white"
-                    android:text="Play">
+                    android:text="Pesan Sekarang"
+                    android:textAllCaps="false">
                 </androidx.appcompat.widget.AppCompatButton>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -84,182 +86,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/endgame"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="20dp"
-                android:paddingLeft="20dp">
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/endgame">
-                </ImageView>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_semibold"
-                        android:text="Avengers: Endgame"
-                        android:textColor="@color/lightblue"
-                        android:textSize="20dp"></TextView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/lightblue"
-                        android:fontFamily="@font/inter"
-                        android:text="Action, Adventure, Fantasy"
-                        android:textSize="15dp"></TextView>
-
-                    <TextView
-                        android:textColor="@color/lightblue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter"
-                        android:text="3 Jam 10 Menit"
-                        android:textSize="15dp"></TextView>
-                </LinearLayout>
-            </LinearLayout>
+                android:text="Film Minggu Ini"
+                android:textColor="@color/white"
+                android:layout_margin="10dp"/>
 
             <LinearLayout
-                android:id="@+id/granturismo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="20dp"
-                android:paddingLeft="20dp">
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/granturismo">
-                </ImageView>
-                <LinearLayout
+                android:orientation="horizontal">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewFilmMingguIni"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_semibold"
-                        android:text="Gran Turismo"
-                        android:textColor="@color/lightblue"
-                        android:textSize="20dp"></TextView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter"
-                        android:textColor="@color/lightblue"
-                        android:text="Action"
-                        android:textSize="15dp"></TextView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter"
-                        android:textColor="@color/lightblue"
-                        android:text="2 Jam 14 Menit"
-                        android:textSize="15dp"></TextView>
-                </LinearLayout>
-
+                    android:orientation="horizontal"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"/>
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/missionimpossible"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="20dp"
-                android:paddingLeft="20dp">
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/missionimpossible">
-                </ImageView>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_semibold"
-                        android:textColor="@color/lightblue"
-                        android:text="Mission Impossible: Dead Reckoning"
-                        android:textSize="20dp"></TextView>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter"
-                        android:textColor="@color/lightblue"
-                        android:text="Action, Adventure, Fantasy"
-                        android:textSize="15dp"></TextView>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter"
-                        android:textColor="@color/white"
-                        android:text="1 Jam 50 Menit"
-                        android:textSize="15dp"></TextView>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/spectre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="20dp"
-                android:paddingLeft="20dp"
-                android:paddingBottom="20dp">
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/spectre">
-                </ImageView>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/lightblue"
-                        android:fontFamily="@font/inter_semibold"
-                        android:text="James Bond: Spectre"
-                        android:textSize="20dp"></TextView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/lightblue"
-                        android:fontFamily="@font/inter"
-                        android:text="Action, Adventure"
-                        android:textSize="15dp"></TextView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/lightblue"
-                        android:fontFamily="@font/inter"
-                        android:text="1 Jam 50 Menit"
-                        android:textSize="15dp"></TextView>
-                </LinearLayout>
-            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>
