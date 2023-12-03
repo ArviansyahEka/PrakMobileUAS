@@ -1,14 +1,12 @@
 package com.example.prakmobileuas.ui
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.prakmobileuas.R
-import com.example.prakmobileuas.databinding.ActivityAdminBinding
 import com.example.prakmobileuas.databinding.ActivityDetailBinding
 
 class DetailActivity : AppCompatActivity() {
@@ -27,14 +25,12 @@ class DetailActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        with(binding){
+        with(binding) {
             backbutton.setOnClickListener {
-                val intent = Intent(this@DetailActivity, UserActivity::class.java)
-                startActivity(intent)
+                onBackPressed()
             }
         }
 

@@ -1,4 +1,3 @@
-// TambahFilmActivity.kt
 package com.example.prakmobileuas.ui
 
 import android.app.Activity
@@ -9,6 +8,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.prakmobileuas.R
@@ -40,8 +40,8 @@ class TambahFilmActivity : AppCompatActivity() {
                 selectedImageUri = data?.data ?: return@registerForActivityResult
 
                 // Lakukan sesuatu dengan URI gambar yang dipilih, contoh: tampilkan gambar
-                // val imageView = findViewById<ImageView>(R.id.imageView)
-                // imageView.setImageURI(selectedImageUri)
+                 val imageView = findViewById<ImageView>(R.id.imageView)
+                 imageView.setImageURI(selectedImageUri)
             }
         }
 
@@ -63,6 +63,14 @@ class TambahFilmActivity : AppCompatActivity() {
             pickImage()
         }
 
+        if (intent.getBooleanExtra("edit_mode", false)) {
+            val filmId = intent.getStringExtra("film_id")
+            if (filmId != null) {
+                // Jika dalam mode edit, dapatkan data film dari Firestore
+                getFilmData(filmId)
+            }
+        }
+
         btnSimpan.setOnClickListener {
             // Mendapatkan data dari input
             val judul = edtJudul.text.toString()
@@ -73,11 +81,56 @@ class TambahFilmActivity : AppCompatActivity() {
 
             // Memastikan gambar sudah dipilih sebelum menyimpan
             if (::selectedImageUri.isInitialized) {
-                uploadImageToStorage(judul, sinopsis, tahun, genre, rating)
+                if (intent.getBooleanExtra("edit_mode", false)) {
+                    // Jika dalam mode edit, buat objek Film dari data yang diedit dan panggil fungsi editFilm
+                    val editedFilm = Film(
+                        id = intent.getStringExtra("film_id") ?: return@setOnClickListener,
+                        judul = judul,
+                        sinopsis = sinopsis,
+                        tahun = tahun,
+                        genre = genre,
+                        rating = rating,
+                        poster = ""
+                    )
+
+                    editFilm(editedFilm)
+                } else {
+                    // Jika bukan mode edit, jalankan proses upload gambar dan tambah film baru
+                    uploadImageToStorage(judul, sinopsis, tahun, genre, rating)
+                }
             } else {
                 Log.e("TambahFilmActivity", "Please pick an image")
             }
         }
+    }
+
+    private fun getFilmData(filmId: String) {
+        filmCollectionRef.document(filmId).get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    // Dokumen ditemukan, ambil data dan isi formulir
+                    val film = documentSnapshot.toObject(Film::class.java)
+                    if (film != null) {
+                        fillFormWithFilmData(film)
+                    }
+                } else {
+                    Log.e("TambahFilmActivity", "Document not found for filmId: $filmId")
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("TambahFilmActivity", "Error getting film data", e)
+            }
+    }
+
+    private fun fillFormWithFilmData(film: Film) {
+        // Isikan formulir dengan data film yang ditemukan
+        edtJudul.setText(film.judul)
+        edtSinopsis.setText(film.sinopsis)
+        edtTahun.setText(film.tahun)
+        edtGenre.setText(film.genre)
+        edtRating.setText(film.rating)
+
+        // TODO: Tambahkan logika untuk menampilkan gambar poster jika diperlukan
     }
 
     private fun pickImage() {
@@ -124,6 +177,32 @@ class TambahFilmActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e ->
                 Log.e("TambahFilmActivity", "Error adding film", e)
+            }
+    }
+
+    private fun editFilm(film: Film) {
+        val filmId = film.id
+
+        Log.d("TambahFilmActivity", "Editing film with ID: $filmId")
+
+        val filmData = mapOf(
+            "judul" to film.judul,
+            "sinopsis" to film.sinopsis,
+            "tahun" to film.tahun,
+            "genre" to film.genre,
+            "rating" to film.rating,
+            "poster" to film.poster
+            // tambahkan properti lain sesuai kebutuhan
+        )
+
+        filmCollectionRef.document(filmId)
+            .update(filmData)
+            .addOnSuccessListener {
+                Log.d("TambahFilmActivity", "Film successfully updated with ID: $filmId")
+                navigateToAdminActivity()
+            }
+            .addOnFailureListener { e ->
+                Log.e("TambahFilmActivity", "Error updating film with ID: $filmId", e)
             }
     }
 

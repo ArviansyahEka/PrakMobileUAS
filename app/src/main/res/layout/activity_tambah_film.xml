@@ -1,50 +1,76 @@
-<!-- activity_tambah_film.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.TambahFilmActivity">
+    android:background="@color/black">
 
-    <EditText
-        android:id="@+id/edtJudul"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Judul" />
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/edtSinopsis"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Sinopsis" />
+        <!-- Wrap all child elements in a LinearLayout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/edtTahun"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Tahun" />
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:src="@drawable/filmixadminlogo"
+                android:contentDescription="Filmix Admin Logo" />
 
-    <EditText
-        android:id="@+id/edtGenre"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Genre" />
+            <EditText
+                android:id="@+id/edtJudul"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Judul" />
 
-    <EditText
-        android:id="@+id/edtRating"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Rating" />
+            <EditText
+                android:id="@+id/edtSinopsis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Sinopsis" />
 
-    <Button
-        android:id="@+id/pickImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pick Image" />
+            <EditText
+                android:id="@+id/edtTahun"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tahun" />
 
-    <Button
-        android:id="@+id/btnSimpan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Simpan" />
-</LinearLayout>
+            <EditText
+                android:id="@+id/edtGenre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Genre" />
+
+            <EditText
+                android:id="@+id/edtRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Rating" />
+
+            <Button
+                android:id="@+id/pickImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick Image" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" />
+
+            <Button
+                android:id="@+id/btnSimpan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Simpan" />
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

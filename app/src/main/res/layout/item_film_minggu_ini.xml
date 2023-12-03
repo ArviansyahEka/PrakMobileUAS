@@ -11,6 +11,7 @@
         android:layout_height="150dp"
         android:paddingStart="5dp"
         android:src="@drawable/placeholder_image"
+        android:background="@drawable/container"
         android:scaleType="centerCrop"/>
 
     <!-- Add other views as needed -->

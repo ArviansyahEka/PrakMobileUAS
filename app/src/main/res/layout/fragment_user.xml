@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".UserFragment"
     android:background="@color/black">
 
+    <!-- TODO: Update blank fragment layout -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -131,7 +132,6 @@
                     android:textColor="@color/white"
                     android:fontFamily="@font/netflixsansmedium"
                     android:textSize="18dp"
-                    android:paddingTop="10dp"
                     android:layout_margin="10dp"/>
 
                 <LinearLayout
@@ -152,4 +152,5 @@
 
         </LinearLayout>
     </ScrollView>
-</RelativeLayout>
+
+</FrameLayout>
