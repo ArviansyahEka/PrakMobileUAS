@@ -68,7 +68,8 @@ class AdminFragment : Fragment() {
                 return@addSnapshotListener
             }
 
-            val films = snapshots?.toObjects(Film::class.java)
+            // Menggunakan documents untuk mendapatkan daftar dokumen
+            val films = snapshots?.documents?.mapNotNull { it.toObject(Film::class.java)?.copy(id = it.id) }
             if (films != null) {
                 filmList.clear()
                 filmList.addAll(films)
@@ -76,6 +77,7 @@ class AdminFragment : Fragment() {
             }
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

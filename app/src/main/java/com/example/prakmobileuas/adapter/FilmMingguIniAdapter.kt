@@ -1,5 +1,3 @@
-// FilmMingguIniAdapter.kt
-
 package com.example.prakmobileuas.adapter
 
 import android.view.LayoutInflater
@@ -15,7 +13,7 @@ interface FilmItemClickListener {
     fun onFilmItemClick(film: Film)
 }
 
-class FilmMingguIniAdapter(private val filmList: List<Film>, private val itemClickListener: FilmItemClickListener) :
+class FilmMingguIniAdapter(private val filmList: MutableList<Film>, private val itemClickListener: FilmItemClickListener) :
     RecyclerView.Adapter<FilmMingguIniAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -43,6 +41,11 @@ class FilmMingguIniAdapter(private val filmList: List<Film>, private val itemCli
         holder.itemView.setOnClickListener {
             itemClickListener.onFilmItemClick(film)
         }
+    }
+
+    fun addFilmToList(film: Film) {
+        filmList.add(film)
+        notifyItemInserted(filmList.size - 1)
     }
 
     override fun getItemCount(): Int {

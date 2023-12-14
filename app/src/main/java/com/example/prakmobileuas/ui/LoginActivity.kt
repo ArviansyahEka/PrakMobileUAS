@@ -28,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         sessionManager = SessionManager(this)
 
+
         val etUsername = findViewById<EditText>(R.id.username)
         val etPassword = findViewById<EditText>(R.id.password)
         val btnLogin = findViewById<Button>(R.id.login_login)
@@ -46,6 +47,11 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        if (sessionManager.isLoggedIn()) {
+            // Pengguna sudah login, arahkan ke Activity utama
+            redirectToAppropriateActivity(sessionManager.getUserDetails()[SessionManager.KEY_ROLE] ?: "")
+            finish() // Menutup LoginActivity agar tidak dapat dikembalikan
+        }
     }
 
     private fun loginUser(username: String, password: String) {
@@ -57,17 +63,13 @@ class LoginActivity : AppCompatActivity() {
                         if (!role.isNullOrBlank()) {
                             val lowercaseRole = role.toLowerCase()
 
-                            // Create a com.example.prakmobileuas.main.SessionManager instance
-                            val sessionManager = SessionManager(this@LoginActivity)
-
                             // Store user details in the session
                             sessionManager.createLoginSession(username, lowercaseRole)
+                            sessionManager.setLogin(true) // Tandai bahwa pengguna sudah login
 
                             if (lowercaseRole == "admin") {
-                                // User is an admin, perform admin actions
                                 handleUserRole("Admin")
                             } else {
-                                // User is a regular user, perform user actions
                                 handleUserRole("User")
                             }
                         } else {
@@ -80,6 +82,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity, "Login gagal. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
                 }
             }
+
     }
 
     private fun getUserRoleFromDatabase(userId: String?, callback: (String?) -> Unit) {

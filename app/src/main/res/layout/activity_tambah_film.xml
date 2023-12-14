@@ -65,6 +65,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp" />
 
+            <!-- Tambahkan Button Hapus -->
+            <Button
+                android:id="@+id/btnHapus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hapus" />
+
             <Button
                 android:id="@+id/btnSimpan"
                 android:layout_width="wrap_content"

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -16,7 +17,7 @@
         android:theme="@style/Theme.PrakMobileUAS"
         tools:targetApi="31">
         <activity
-            android:name=".ui.KeranjangActivity"
+            android:name=".ui.UserProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.DetailActivity"

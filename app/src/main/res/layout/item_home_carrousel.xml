@@ -2,8 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <!-- Di dalam item_home_carrousel.xml -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,16 +11,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <ImageView
                 android:id="@+id/carouselImage"
                 android:layout_width="match_parent"
                 android:layout_height="600dp"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:clickable="true" /> <!-- Tambahkan atribut clickable -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
@@ -37,11 +38,13 @@
                         android:fontFamily="@font/netflixsansmedium"
                         android:textSize="32sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center">
+
                     <TextView
                         android:id="@+id/hometahun"
                         android:layout_marginEnd="5dp"
@@ -75,5 +78,4 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>

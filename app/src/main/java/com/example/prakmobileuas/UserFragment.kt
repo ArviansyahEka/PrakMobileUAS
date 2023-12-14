@@ -6,36 +6,27 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.prakmobileuas.adapter.FilmItemClickListener
-import com.example.prakmobileuas.adapter.FilmMingguIniAdapter
 import com.example.prakmobileuas.adapter.HomeCarrousel
+import com.example.prakmobileuas.adapter.FilmMingguIniAdapter
 import com.example.prakmobileuas.database.Film
+import com.example.prakmobileuas.main.SessionManager
 import com.example.prakmobileuas.ui.DetailActivity
+import com.example.prakmobileuas.ui.UserProfileActivity
 import com.google.firebase.firestore.FirebaseFirestore
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class UserFragment : Fragment(), FilmItemClickListener {
 
-    private var param1: String? = null
-    private var param2: String? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewPagerCarousel: ViewPager2
     private lateinit var carouselAdapter: HomeCarrousel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,16 +36,32 @@ class UserFragment : Fragment(), FilmItemClickListener {
 
         recyclerView = view.findViewById(R.id.recyclerViewFilmMingguIni)
         viewPagerCarousel = view.findViewById(R.id.viewPagerCarousel)
+
+        // Memanggil setupRecyclerView di sini
         setupRecyclerView()
         loadFilmData()
+
+        // Menambahkan listener untuk profileImage
+        val profileImage = view.findViewById<ImageView>(R.id.profileImage)
+        profileImage.setOnClickListener {
+            // Implementasikan logika yang diinginkan saat profileImage diklik di sini
+            // Misalnya, navigasi ke halaman profil atau tampilkan dialog profil, dll.
+            // Contoh: Navigasi ke halaman profil
+            val intent = Intent(requireContext(), UserProfileActivity::class.java)
+            startActivity(intent)
+        }
+
+
 
         return view
     }
 
     private fun setupRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        carouselAdapter = HomeCarrousel(requireContext(), listOf())
+        // Inisialisasi adapter karusel dengan daftar kosong pada awalnya
+        carouselAdapter = HomeCarrousel(requireContext())
         viewPagerCarousel.adapter = carouselAdapter
     }
 
@@ -74,7 +81,16 @@ class UserFragment : Fragment(), FilmItemClickListener {
                     val genre = document.getString("genre") ?: ""
                     val rating = document.getString("rating") ?: ""
 
-                    filmList.add(Film(judul = judul, poster = poster, sinopsis = sinopsis, tahun = tahun, genre = genre, rating = rating))
+                    filmList.add(
+                        Film(
+                            judul = judul,
+                            poster = poster,
+                            sinopsis = sinopsis,
+                            tahun = tahun,
+                            genre = genre,
+                            rating = rating
+                        )
+                    )
                 }
 
                 val adapter = FilmMingguIniAdapter(filmList, this)
@@ -83,7 +99,11 @@ class UserFragment : Fragment(), FilmItemClickListener {
                 carouselAdapter.updateData(filmList)
             }
             .addOnFailureListener { exception ->
-                Log.e("UserFragment", "Error getting film data", exception)
+                Log.e(
+                    "com.example.prakmobileuas.UserFragment",
+                    "Error getting film data",
+                    exception
+                )
             }
     }
 
@@ -96,21 +116,12 @@ class UserFragment : Fragment(), FilmItemClickListener {
         intent.putExtra("film_rating", film.rating)
         intent.putExtra("film_poster", film.poster)
 
-        view?.findViewById<TextView>(R.id.hometahun)?.text = film.tahun
-        view?.findViewById<TextView>(R.id.homerating)?.text = film.rating
-        view?.findViewById<TextView>(R.id.homegenre)?.text = film.genre
+        // Menggunakan requireView() untuk mendapatkan referensi ke tampilan
+        requireView().findViewById<TextView>(R.id.hometahun).text = film.tahun
+        requireView().findViewById<TextView>(R.id.homerating).text = film.rating
+        requireView().findViewById<TextView>(R.id.homegenre).text = film.genre
 
         startActivity(intent)
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UserFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
+

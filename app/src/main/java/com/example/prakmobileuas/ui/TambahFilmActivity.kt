@@ -1,8 +1,12 @@
 package com.example.prakmobileuas.ui
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -11,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.example.prakmobileuas.R
 import com.example.prakmobileuas.database.Film
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,10 +30,12 @@ class TambahFilmActivity : AppCompatActivity() {
     private lateinit var edtGenre: EditText
     private lateinit var edtRating: EditText
     private lateinit var btnSimpan: Button
+    private lateinit var btnHapus: Button
     private lateinit var pickImageButton: Button
+    private lateinit var imageView: ImageView
 
     private val firestore = FirebaseFirestore.getInstance()
-    private val filmCollectionRef = firestore.collection("film")
+    private val koleksiFilmRef = firestore.collection("film")
 
     private lateinit var selectedImageUri: Uri
     private lateinit var storageRef: StorageReference
@@ -40,8 +47,7 @@ class TambahFilmActivity : AppCompatActivity() {
                 selectedImageUri = data?.data ?: return@registerForActivityResult
 
                 // Lakukan sesuatu dengan URI gambar yang dipilih, contoh: tampilkan gambar
-                 val imageView = findViewById<ImageView>(R.id.imageView)
-                 imageView.setImageURI(selectedImageUri)
+                imageView.setImageURI(selectedImageUri)
             }
         }
 
@@ -55,7 +61,9 @@ class TambahFilmActivity : AppCompatActivity() {
         edtGenre = findViewById(R.id.edtGenre)
         edtRating = findViewById(R.id.edtRating)
         btnSimpan = findViewById(R.id.btnSimpan)
+        btnHapus = findViewById(R.id.btnHapus)
         pickImageButton = findViewById(R.id.pickImageButton)
+        imageView = findViewById(R.id.imageView)
 
         storageRef = FirebaseStorage.getInstance().reference
 
@@ -67,7 +75,7 @@ class TambahFilmActivity : AppCompatActivity() {
             val filmId = intent.getStringExtra("film_id")
             if (filmId != null) {
                 // Jika dalam mode edit, dapatkan data film dari Firestore
-                getFilmData(filmId)
+                dapatkanDataFilm(filmId)
             }
         }
 
@@ -83,7 +91,7 @@ class TambahFilmActivity : AppCompatActivity() {
             if (::selectedImageUri.isInitialized) {
                 if (intent.getBooleanExtra("edit_mode", false)) {
                     // Jika dalam mode edit, buat objek Film dari data yang diedit dan panggil fungsi editFilm
-                    val editedFilm = Film(
+                    val filmYangDiedit = Film(
                         id = intent.getStringExtra("film_id") ?: return@setOnClickListener,
                         judul = judul,
                         sinopsis = sinopsis,
@@ -93,36 +101,80 @@ class TambahFilmActivity : AppCompatActivity() {
                         poster = ""
                     )
 
-                    editFilm(editedFilm)
+                    editFilm(filmYangDiedit)
                 } else {
                     // Jika bukan mode edit, jalankan proses upload gambar dan tambah film baru
-                    uploadImageToStorage(judul, sinopsis, tahun, genre, rating)
+                    unggahGambarKePenyimpanan(judul, sinopsis, tahun, genre, rating)
+                    showNotification()
                 }
             } else {
-                Log.e("TambahFilmActivity", "Please pick an image")
+                Log.e("TambahFilmActivity", "Silakan pilih gambar")
+            }
+        }
+
+        // Tambahkan fungsi hapus
+        btnHapus.setOnClickListener {
+            // Hapus film jika dalam mode edit
+            if (intent.getBooleanExtra("edit_mode", false)) {
+                val filmId = intent.getStringExtra("film_id")
+                if (filmId != null) {
+                    hapusFilm(filmId)
+                }
+            } else {
+                // Tampilkan pesan bahwa hapus tidak dapat dilakukan karena bukan mode edit
+                Log.e("TambahFilmActivity", "Tidak dapat menghapus dalam mode tambah")
             }
         }
     }
+    private fun showNotification() {
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-    private fun getFilmData(filmId: String) {
-        filmCollectionRef.document(filmId).get()
+        val channelId = "com.example.prakmobileuas.channelId"
+        val channelName = "Film Channel"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Film Notification Channel"
+            }
+
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.filmixadminlogo)
+            .setContentTitle("Penambahan Film Berhasil!")
+            .setContentText("Film baru telah ditambahkan.")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+
+        notificationManager.notify(0, notificationBuilder.build())
+    }
+
+
+    private fun dapatkanDataFilm(idFilm: String) {
+        koleksiFilmRef.document(idFilm).get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
                     // Dokumen ditemukan, ambil data dan isi formulir
                     val film = documentSnapshot.toObject(Film::class.java)
                     if (film != null) {
-                        fillFormWithFilmData(film)
+                        isiFormDenganDataFilm(film)
                     }
                 } else {
-                    Log.e("TambahFilmActivity", "Document not found for filmId: $filmId")
+                    Log.e("TambahFilmActivity", "Dokumen tidak ditemukan untuk idFilm: $idFilm")
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("TambahFilmActivity", "Error getting film data", e)
+                Log.e("TambahFilmActivity", "Error mendapatkan data film", e)
             }
     }
 
-    private fun fillFormWithFilmData(film: Film) {
+    private fun isiFormDenganDataFilm(film: Film) {
         // Isikan formulir dengan data film yang ditemukan
         edtJudul.setText(film.judul)
         edtSinopsis.setText(film.sinopsis)
@@ -138,26 +190,26 @@ class TambahFilmActivity : AppCompatActivity() {
         resultLauncher.launch(pickImage)
     }
 
-    private fun uploadImageToStorage(judul: String, sinopsis: String, tahun: String, genre: String, rating: String) {
-        val filmId = generateFilmId() // Generate a unique ID for the film
-        val imageRef = storageRef.child("posters/$filmId.jpg")
+    private fun unggahGambarKePenyimpanan(judul: String, sinopsis: String, tahun: String, genre: String, rating: String) {
+        val idFilm = generateFilmId() // Generate a unique ID for the film
+        val imageRef = storageRef.child("posters/$idFilm.jpg")
 
         imageRef.putFile(selectedImageUri)
             .addOnSuccessListener {
-                // Gambar berhasil diunggah, dapatkan URL gambar dari Storage
+                // Gambar berhasil diunggah, dapatkan URL gambar dari Penyimpanan
                 imageRef.downloadUrl.addOnSuccessListener { uri ->
                     // Dapatkan URI gambar dan simpan ke Firestore atau lakukan apa yang diperlukan
-                    val imageUrl = uri.toString()
+                    val urlGambar = uri.toString()
 
                     // Simpan data film ke Firestore
                     val film = Film(
-                        id = filmId,
+                        id = idFilm,
                         judul = judul,
                         sinopsis = sinopsis,
                         tahun = tahun,
                         genre = genre,
                         rating = rating,
-                        poster = imageUrl
+                        poster = urlGambar
                     )
 
                     tambahFilm(film)
@@ -165,27 +217,27 @@ class TambahFilmActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 // Penanganan kesalahan unggah
-                Log.e("TambahFilmActivity", "Failed to upload image to storage", it)
+                Log.e("TambahFilmActivity", "Gagal mengunggah gambar ke penyimpanan", it)
             }
     }
 
     private fun tambahFilm(film: Film) {
-        filmCollectionRef.add(film)
+        koleksiFilmRef.add(film)
             .addOnSuccessListener { documentReference ->
-                Log.d("TambahFilmActivity", "Film successfully added with ID: ${documentReference.id}")
-                navigateToAdminActivity()
+                Log.d("TambahFilmActivity", "Film berhasil ditambahkan dengan ID: ${documentReference.id}")
+                navigasiKeActivityAdmin()
             }
             .addOnFailureListener { e ->
-                Log.e("TambahFilmActivity", "Error adding film", e)
+                Log.e("TambahFilmActivity", "Error menambahkan film", e)
             }
     }
 
     private fun editFilm(film: Film) {
-        val filmId = film.id
+        val idFilm = film.id
 
-        Log.d("TambahFilmActivity", "Editing film with ID: $filmId")
+        Log.d("TambahFilmActivity", "Mengedit film dengan ID: $idFilm")
 
-        val filmData = mapOf(
+        val dataFilm = mapOf(
             "judul" to film.judul,
             "sinopsis" to film.sinopsis,
             "tahun" to film.tahun,
@@ -195,26 +247,38 @@ class TambahFilmActivity : AppCompatActivity() {
             // tambahkan properti lain sesuai kebutuhan
         )
 
-        filmCollectionRef.document(filmId)
-            .update(filmData)
+        koleksiFilmRef.document(idFilm)
+            .update(dataFilm)
             .addOnSuccessListener {
-                Log.d("TambahFilmActivity", "Film successfully updated with ID: $filmId")
-                navigateToAdminActivity()
+                Log.d("TambahFilmActivity", "Film berhasil diperbarui dengan ID: $idFilm")
+                navigasiKeActivityAdmin()
             }
             .addOnFailureListener { e ->
-                Log.e("TambahFilmActivity", "Error updating film with ID: $filmId", e)
+                Log.e("TambahFilmActivity", "Error memperbarui film dengan ID: $idFilm", e)
             }
     }
 
-    private fun navigateToAdminActivity() {
+    private fun hapusFilm(idFilm: String) {
+        koleksiFilmRef.document(idFilm)
+            .delete()
+            .addOnSuccessListener {
+                Log.d("TambahFilmActivity", "Film berhasil dihapus dengan ID: $idFilm")
+                navigasiKeActivityAdmin()
+            }
+            .addOnFailureListener { e ->
+                Log.e("TambahFilmActivity", "Error menghapus film dengan ID: $idFilm", e)
+            }
+    }
+
+    private fun navigasiKeActivityAdmin() {
         val intent = Intent(this, AdminActivity::class.java)
         startActivity(intent)
         finish()
     }
 
     private fun generateFilmId(): String {
-        // Implement your logic to generate a unique film ID (you can use timestamp, UUID, etc.)
-        // For simplicity, I'm using a timestamp in milliseconds
+        // Implementasikan logika Anda untuk menghasilkan ID film yang unik (Anda dapat menggunakan timestamp, UUID, dll.)
+        // Untuk sederhananya, saya menggunakan timestamp dalam milidetik
         return System.currentTimeMillis().toString()
     }
 }

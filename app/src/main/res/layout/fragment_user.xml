@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserFragment"
     android:background="@color/black">
 
-    <!-- TODO: Update blank fragment layout -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -39,6 +38,7 @@
                         android:orientation="vertical"
                         android:gravity="end">
                         <ImageView
+                            android:id="@+id/profileImage"
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="13dp"
                             android:layout_width="35dp"
@@ -79,10 +79,12 @@
                         android:layout_gravity="bottom"
                         android:gravity="center"
                         android:orientation="vertical">
+                        <!-- Tambahkan ID untuk tombol "List Saya" -->
                         <ImageView
+                            android:id="@+id/addlist"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/baseline_check_circle_24"/>
+                            android:src="@drawable/baseline_playlist_add_24" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -124,15 +126,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tayang Minggu Ini"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/netflixsansmedium"
-                    android:textSize="18dp"
-                    android:layout_margin="10dp"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lanjutkan Menonton untuk"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/netflixsansmedium"
+                        android:textSize="18dp"
+                        android:paddingTop="10dp"
+                        android:layout_margin="10dp"/>
+                    <TextView
+                        android:id="@+id/usernameTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="$User"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/netflixsansmedium"
+                        android:textSize="18dp"
+                        android:layout_marginTop="10dp"
+                        android:paddingTop="10dp"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -148,9 +165,18 @@
                         android:layout_marginEnd="15dp"
                         android:orientation="horizontal" />
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="List Saya"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/netflixsansmedium"
+                    android:textSize="18dp"
+                    android:paddingTop="10dp"
+                    android:layout_margin="10dp"/>
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
-
-</FrameLayout>
+</RelativeLayout>
