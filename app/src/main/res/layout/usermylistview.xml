@@ -1,0 +1,26 @@
+<!-- res/layout/usermylistview.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginStart="5dp">
+
+    <ImageView
+        android:id="@+id/usermylistimageview"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:paddingStart="5dp"
+        android:src="@drawable/placeholder_image"
+        android:background="@drawable/container"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/textJudul"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Judul Film"
+        android:textAlignment="center"/>
+
+    <!-- Add other views as needed -->
+</LinearLayout>

@@ -33,6 +33,7 @@ class TambahFilmActivity : AppCompatActivity() {
     private lateinit var btnHapus: Button
     private lateinit var pickImageButton: Button
     private lateinit var imageView: ImageView
+    private val PICK_IMAGE_REQUEST = 1
 
     private val firestore = FirebaseFirestore.getInstance()
     private val koleksiFilmRef = firestore.collection("film")
@@ -184,10 +185,11 @@ class TambahFilmActivity : AppCompatActivity() {
 
         // TODO: Tambahkan logika untuk menampilkan gambar poster jika diperlukan
     }
-
     private fun pickImage() {
-        val pickImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        resultLauncher.launch(pickImage)
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
     private fun unggahGambarKePenyimpanan(judul: String, sinopsis: String, tahun: String, genre: String, rating: String) {

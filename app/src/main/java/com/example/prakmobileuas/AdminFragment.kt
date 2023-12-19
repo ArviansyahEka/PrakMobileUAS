@@ -1,31 +1,28 @@
 // AdminFragment.kt
 package com.example.prakmobileuas
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.ListView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.prakmobileuas.adapter.AdminListViewAdapter
+import com.example.prakmobileuas.adapter.RecyclerItemClickListener
 import com.example.prakmobileuas.database.Film
-import com.example.prakmobileuas.ui.AdminActivity
 import com.example.prakmobileuas.ui.TambahFilmActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 class AdminFragment : Fragment() {
 
-    private lateinit var listView: ListView
+    private lateinit var recyclerView: RecyclerView
     private lateinit var tambahButton: Button
     private lateinit var filmList: MutableList<Film>
-    private lateinit var adapter: ArrayAdapter<Film>
+    private lateinit var filmAdapter: AdminListViewAdapter
 
     private val firestore = FirebaseFirestore.getInstance()
     private val filmCollectionRef = firestore.collection("film")
@@ -33,16 +30,18 @@ class AdminFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        listView = view.findViewById(R.id.listView)
+        recyclerView = view.findViewById(R.id.AdminRecyclerView)
         tambahButton = view.findViewById(R.id.btnTambah)
         filmList = mutableListOf()
 
-        adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_list_item_1,
-            filmList
-        )
-        listView.adapter = adapter
+        // Inisialisasi RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Inisialisasi adapter
+        filmAdapter = AdminListViewAdapter(filmList)
+
+        // Set adapter ke RecyclerView
+        recyclerView.adapter = filmAdapter
 
         observeFilmChanges()
 
@@ -50,15 +49,25 @@ class AdminFragment : Fragment() {
             startActivity(Intent(requireContext(), TambahFilmActivity::class.java))
         }
 
-        listView.setOnItemClickListener { _, _, position, _ ->
-            val selectedFilm = filmList[position]
+        recyclerView.addOnItemTouchListener(
+            RecyclerItemClickListener(
+                requireContext(),
+                recyclerView,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        val selectedFilm = filmList[position]
 
-            val intent = Intent(requireContext(), TambahFilmActivity::class.java)
-            intent.putExtra("film_id", selectedFilm.id)
-            intent.putExtra("edit_mode", true)
-            startActivity(intent)
-        }
+                        val intent = Intent(requireContext(), TambahFilmActivity::class.java)
+                        intent.putExtra("film_id", selectedFilm.id)
+                        intent.putExtra("edit_mode", true)
+                        startActivity(intent)
+                    }
 
+                    override fun onLongItemClick(view: View, position: Int) {
+                        // Handle long item click if needed
+                    }
+                })
+        )
     }
 
     private fun observeFilmChanges() {
@@ -73,7 +82,7 @@ class AdminFragment : Fragment() {
             if (films != null) {
                 filmList.clear()
                 filmList.addAll(films)
-                adapter.notifyDataSetChanged()
+                filmAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -83,20 +92,18 @@ class AdminFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_admin, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_admin, container, false)
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AdminFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-        fun createIntent(context: Context): Intent {
-            return Intent(context, AdminActivity::class.java)
-        }
+        // Inisialisasi RecyclerView
+        val recyclerView: RecyclerView = view.findViewById(R.id.AdminRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Inisialisasi adapter
+        filmAdapter = AdminListViewAdapter(emptyList()) // Awalnya tanpa data
+
+        // Set adapter ke RecyclerView
+        recyclerView.adapter = filmAdapter
+
+        return view
     }
 }

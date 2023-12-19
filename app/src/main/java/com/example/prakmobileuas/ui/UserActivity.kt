@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -13,6 +14,7 @@ import com.example.prakmobileuas.R
 import com.example.prakmobileuas.adapter.FilmItemClickListener
 import com.example.prakmobileuas.adapter.FilmMingguIniAdapter
 import com.example.prakmobileuas.adapter.HomeCarrousel
+import com.example.prakmobileuas.adapter.UserMyListAdapter
 import com.example.prakmobileuas.database.Film
 import com.example.prakmobileuas.main.SessionManager
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,21 +28,21 @@ class UserActivity : AppCompatActivity(), FilmItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user) // Pastikan layout sudah sesuai
+        setContentView(R.layout.activity_user)
 
         recyclerView = findViewById(R.id.recyclerViewFilmMingguIni)
         viewPagerCarousel = findViewById(R.id.viewPagerCarousel)
 
-        // Memanggil setupRecyclerView di sini
-        setupRecyclerView()
+        // Menetapkan LayoutManager untuk recyclerViewListSaya
+        val recyclerViewListSaya = findViewById<RecyclerView>(R.id.recyclerViewListSaya)
+        recyclerViewListSaya.layoutManager = GridLayoutManager(this, 2)
+
+        // Memanggil loadFilmData di sini
         loadFilmData()
 
         // Menambahkan listener untuk profileImage
         val profileImage = findViewById<ImageView>(R.id.profileImage)
         profileImage.setOnClickListener {
-            // Implementasikan logika yang diinginkan saat profileImage diklik di sini
-            // Misalnya, navigasi ke halaman profil atau tampilkan dialog profil, dll.
-            // Contoh: Navigasi ke halaman profil
             val intent = Intent(this, UserProfileActivity::class.java)
             startActivity(intent)
         }
@@ -53,10 +55,7 @@ class UserActivity : AppCompatActivity(), FilmItemClickListener {
     }
 
     private fun setupRecyclerView() {
-        recyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-        // Inisialisasi adapter karusel dengan daftar kosong pada awalnya
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         carouselAdapter = HomeCarrousel(this)
         viewPagerCarousel.adapter = carouselAdapter
     }
@@ -92,6 +91,9 @@ class UserActivity : AppCompatActivity(), FilmItemClickListener {
                 val adapter = FilmMingguIniAdapter(filmList, this)
                 recyclerView.adapter = adapter
 
+                // Memanggil setupRecyclerView di sini
+                setupRecyclerView()
+
                 carouselAdapter.updateData(filmList)
             }
             .addOnFailureListener { exception ->
@@ -112,7 +114,6 @@ class UserActivity : AppCompatActivity(), FilmItemClickListener {
         intent.putExtra("film_rating", film.rating)
         intent.putExtra("film_poster", film.poster)
 
-        // Menggunakan findViewById untuk mendapatkan referensi ke tampilan
         findViewById<TextView>(R.id.hometahun).text = film.tahun
         findViewById<TextView>(R.id.homerating).text = film.rating
         findViewById<TextView>(R.id.homegenre).text = film.genre
@@ -120,5 +121,3 @@ class UserActivity : AppCompatActivity(), FilmItemClickListener {
         startActivity(intent)
     }
 }
-
-
