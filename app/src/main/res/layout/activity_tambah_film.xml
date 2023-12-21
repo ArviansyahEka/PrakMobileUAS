@@ -7,77 +7,169 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="70dp"
+            android:src="@drawable/filmixadminlogo"
+            android:padding="10dp"
+            android:contentDescription="Filmix Admin Logo" />
+    </LinearLayout>
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Wrap all child elements in a LinearLayout -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:src="@drawable/filmixadminlogo"
-                android:contentDescription="Filmix Admin Logo" />
-
-            <EditText
-                android:id="@+id/edtJudul"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Judul" />
+                android:text="Tambah Film"
+                android:fontFamily="@font/netflixsansmedium"
+                android:textColor="@color/white"
+                android:textAlignment="center">
+            </TextView>
 
-            <EditText
-                android:id="@+id/edtSinopsis"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Sinopsis" />
-
-            <EditText
-                android:id="@+id/edtTahun"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:padding="10dp"
+                    android:layout_width="200dp"
+                    android:layout_height="300dp"
+                    android:src="@drawable/customborder"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tahun" />
+                android:gravity="center"
+                android:layout_margin="10dp">
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/pickImageButton"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:text="Pick Image"
+                    android:textColor="@color/white"
+                    android:background="@drawable/customborder"/>
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/edtGenre"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Genre" />
+                android:orientation="vertical"
+                android:padding="20dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Judul Film:"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/netflixsansregular">
+                </TextView>
+                <EditText
+                    android:id="@+id/edtJudul"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Judul" />
 
-            <EditText
-                android:id="@+id/edtRating"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sinopsis Film:"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/netflixsansregular">
+                </TextView>
+                <EditText
+                    android:id="@+id/edtSinopsis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Sinopsis" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tahun Rilis Film:"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/netflixsansregular">
+                </TextView>
+                <EditText
+                    android:id="@+id/edtTahun"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tahun" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Genre Film:"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/netflixsansregular">
+                </TextView>
+                <EditText
+                    android:id="@+id/edtGenre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Genre" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rating Film:"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/netflixsansregular">
+                </TextView>
+
+                <EditText
+                    android:id="@+id/edtRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Rating" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Rating" />
-
-            <Button
-                android:id="@+id/pickImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pick Image" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
-
-            <!-- Tambahkan Button Hapus -->
-            <Button
+                android:orientation="horizontal"
+                android:gravity="center">
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnHapus"
+                android:textColor="@color/white"
+                android:background="@drawable/customborder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hapus" />
+                android:text="Hapus"
+                android:layout_margin="20dp"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSimpan"
+                android:background="@drawable/button"
+                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Simpan" />
+                android:layout_margin="20dp"
+                android:text="Simpan" /></LinearLayout>
 
         </LinearLayout>
     </ScrollView>
+    </LinearLayout>
 </RelativeLayout>

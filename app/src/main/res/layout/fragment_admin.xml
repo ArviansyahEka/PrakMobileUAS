@@ -14,20 +14,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
             <ImageView
-                android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:src="@drawable/filmixadminlogo"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Logout"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:gravity="center"
-                android:textAlignment="textEnd"/>
+                android:layout_width="140dp"
+                android:layout_height="70dp"
+                android:src="@drawable/filmixadminlogo"
+                android:padding="10dp"
+                android:contentDescription="Filmix Admin Logo" />
         </LinearLayout>
 
         <LinearLayout
@@ -42,17 +36,29 @@
                 android:textSize="15dp"
                 android:textColor="@color/white"></TextView>
         </LinearLayout>
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/AdminRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="vertical" />
-        <Button
-            android:id="@+id/btnTambah"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/red"
-            android:text="Tambah Data"/>
+            android:gravity="center"
+            android:layout_margin="10dp">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnTambah"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="@font/netflixsansmedium"
+                android:background="@drawable/customborder"
+                android:text="Tambah Data"/>
+        </LinearLayout>
+
     </LinearLayout>
 </FrameLayout>

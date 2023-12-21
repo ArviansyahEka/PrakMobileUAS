@@ -1,4 +1,3 @@
-// UserMyListAdapter.kt
 package com.example.prakmobileuas.adapter
 
 import android.view.LayoutInflater
@@ -7,28 +6,55 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.prakmobileuas.R
 import com.example.prakmobileuas.database.Film
 
-class UserMyListAdapter(private val filmList: List<Film>) :
-    RecyclerView.Adapter<UserMyListAdapter.ViewHolder>() {
+// Define the interface for item click in MyList
+interface MyListFilmItemClickListener {
+    fun onMyListItemClick(film: Film)
+}
+
+class UserMyListAdapter(
+    private val filmList: MutableList<Film>,
+    private var myListFilmItemClickListener: MyListFilmItemClickListener
+) : RecyclerView.Adapter<UserMyListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.usermylistimageview)
-        val textJudul: TextView = itemView.findViewById(R.id.textJudul)
+        val imageView: ImageView = itemView.findViewById(R.id.usermylistimageview) // Change ID here
+        val textFilmTitle: TextView = itemView.findViewById(R.id.textJudul)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.usermylistview, parent, false)
-        return ViewHolder(itemView)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentItem = filmList[position]
-        // Set informasi film ke tampilan di sini
-        holder.imageView.setImageResource(R.drawable.placeholder_image)
-        holder.textJudul.text = currentItem.judul
+        val film = filmList[position]
+
+        holder.textFilmTitle.text = film.judul
+        Glide.with(holder.imageView)
+            .load(film.poster)
+            .placeholder(R.drawable.placeholder_image) // Placeholder image while loading
+            .error(R.drawable.error_image) // Error image if loading fails
+            .centerCrop()
+            .into(holder.imageView)
+
+        // Set click listener untuk item di RecyclerView
+        holder.itemView.setOnClickListener {
+            myListFilmItemClickListener.onMyListItemClick(film)
+        }
+    }
+
+    fun setMyListFilmItemClickListener(listener: MyListFilmItemClickListener) {
+        myListFilmItemClickListener = listener
+    }
+
+    fun addFilmToList(film: Film) {
+        filmList.add(film)
+        notifyItemInserted(filmList.size - 1)
     }
 
     override fun getItemCount(): Int {

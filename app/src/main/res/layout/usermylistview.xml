@@ -1,15 +1,15 @@
 <!-- res/layout/usermylistview.xml -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="100dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginStart="5dp">
+    android:layout_margin="10dp">
 
     <ImageView
         android:id="@+id/usermylistimageview"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
         android:paddingStart="5dp"
         android:src="@drawable/placeholder_image"
         android:background="@drawable/container"
@@ -19,6 +19,10 @@
         android:id="@+id/textJudul"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/netflixsansregular"
+        android:textColor="@color/white"
+        android:paddingTop="5dp"
+        android:textSize="15dp"
         android:text="Judul Film"
         android:textAlignment="center"/>
 

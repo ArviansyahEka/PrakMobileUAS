@@ -14,33 +14,41 @@ import com.example.prakmobileuas.R
 import com.example.prakmobileuas.adapter.FilmItemClickListener
 import com.example.prakmobileuas.adapter.FilmMingguIniAdapter
 import com.example.prakmobileuas.adapter.HomeCarrousel
+import com.example.prakmobileuas.adapter.MyListFilmItemClickListener
 import com.example.prakmobileuas.adapter.UserMyListAdapter
 import com.example.prakmobileuas.database.Film
 import com.example.prakmobileuas.main.SessionManager
 import com.google.firebase.firestore.FirebaseFirestore
 
-class UserActivity : AppCompatActivity(), FilmItemClickListener {
+class UserActivity : AppCompatActivity(), MyListFilmItemClickListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewPagerCarousel: ViewPager2
     private lateinit var carouselAdapter: HomeCarrousel
     private lateinit var sessionManager: SessionManager
+    private lateinit var recyclerViewListSaya: RecyclerView
+
+    companion object {
+        private const val TAG = "UserActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
 
         recyclerView = findViewById(R.id.recyclerViewFilmMingguIni)
+        recyclerViewListSaya = findViewById(R.id.recyclerViewListSaya)
         viewPagerCarousel = findViewById(R.id.viewPagerCarousel)
 
-        // Menetapkan LayoutManager untuk recyclerViewListSaya
-        val recyclerViewListSaya = findViewById<RecyclerView>(R.id.recyclerViewListSaya)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        // Set LayoutManager for recyclerViewListSaya
         recyclerViewListSaya.layoutManager = GridLayoutManager(this, 2)
 
-        // Memanggil loadFilmData di sini
+        // Call loadFilmData here
         loadFilmData()
 
-        // Menambahkan listener untuk profileImage
+        // Add listener for profileImage
         val profileImage = findViewById<ImageView>(R.id.profileImage)
         profileImage.setOnClickListener {
             val intent = Intent(this, UserProfileActivity::class.java)
@@ -55,7 +63,6 @@ class UserActivity : AppCompatActivity(), FilmItemClickListener {
     }
 
     private fun setupRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         carouselAdapter = HomeCarrousel(this)
         viewPagerCarousel.adapter = carouselAdapter
     }
@@ -88,24 +95,41 @@ class UserActivity : AppCompatActivity(), FilmItemClickListener {
                     )
                 }
 
-                val adapter = FilmMingguIniAdapter(filmList, this)
-                recyclerView.adapter = adapter
+                val adapter = FilmMingguIniAdapter(filmList, object : FilmItemClickListener {
+                    override fun onFilmItemClick(film: Film) {
+                        // Handle item click in FilmMingguIniAdapter
+                        val intent = Intent(this@UserActivity, DetailActivity::class.java)
+                        intent.putExtra("film_judul", film.judul)
+                        intent.putExtra("film_sinopsis", film.sinopsis)
+                        intent.putExtra("film_tahun", film.tahun)
+                        intent.putExtra("film_genre", film.genre)
+                        intent.putExtra("film_rating", film.rating)
+                        intent.putExtra("film_poster", film.poster)
 
-                // Memanggil setupRecyclerView di sini
+                        findViewById<TextView>(R.id.hometahun).text = film.tahun
+                        findViewById<TextView>(R.id.homerating).text = film.rating
+                        findViewById<TextView>(R.id.homegenre).text = film.genre
+
+                        startActivity(intent)
+                    }
+                })
+
+                recyclerView.adapter = adapter
                 setupRecyclerView()
+
+                val mylistadapter = UserMyListAdapter(filmList, this@UserActivity)
+                recyclerViewListSaya.adapter = mylistadapter
+                mylistadapter.setMyListFilmItemClickListener(this@UserActivity)
 
                 carouselAdapter.updateData(filmList)
             }
             .addOnFailureListener { exception ->
-                Log.e(
-                    "com.example.prakmobileuas.UserActivity",
-                    "Error getting film data",
-                    exception
-                )
+                Log.e(TAG, "Error getting film data", exception)
             }
     }
 
-    override fun onFilmItemClick(film: Film) {
+    override fun onMyListItemClick(film: Film) {
+        // Handle item click in MyList
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("film_judul", film.judul)
         intent.putExtra("film_sinopsis", film.sinopsis)
@@ -121,3 +145,4 @@ class UserActivity : AppCompatActivity(), FilmItemClickListener {
         startActivity(intent)
     }
 }
+

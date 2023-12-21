@@ -9,14 +9,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.prakmobileuas.R
 import com.example.prakmobileuas.adapter.FilmItemClickListener
 import com.example.prakmobileuas.adapter.HomeCarrousel
 import com.example.prakmobileuas.adapter.FilmMingguIniAdapter
 import com.example.prakmobileuas.database.Film
-import com.example.prakmobileuas.main.SessionManager
 import com.example.prakmobileuas.ui.DetailActivity
 import com.example.prakmobileuas.ui.UserProfileActivity
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,7 +27,6 @@ class UserFragment : Fragment(), FilmItemClickListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewPagerCarousel: ViewPager2
     private lateinit var carouselAdapter: HomeCarrousel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,12 +51,13 @@ class UserFragment : Fragment(), FilmItemClickListener {
             startActivity(intent)
         }
 
-
-
         return view
     }
 
     private fun setupRecyclerView() {
+        val recyclerViewListSaya = view?.findViewById<RecyclerView>(R.id.recyclerViewListSaya)
+        recyclerViewListSaya?.layoutManager = GridLayoutManager(requireContext(), 2)
+
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
@@ -124,4 +125,5 @@ class UserFragment : Fragment(), FilmItemClickListener {
         startActivity(intent)
     }
 }
+
 

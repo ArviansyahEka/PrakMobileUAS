@@ -49,11 +49,4 @@ class SessionManager(private val context: Context) {
     fun isLoggedIn(): Boolean {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)
     }
-
-
-
-
-    // Add other session-related functions as needed
-
-    // ... rest of the code remains unchanged
 }

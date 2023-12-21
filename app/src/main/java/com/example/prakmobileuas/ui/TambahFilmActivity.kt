@@ -16,6 +16,7 @@ import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import com.bumptech.glide.Glide
 import com.example.prakmobileuas.R
 import com.example.prakmobileuas.database.Film
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,7 +34,6 @@ class TambahFilmActivity : AppCompatActivity() {
     private lateinit var btnHapus: Button
     private lateinit var pickImageButton: Button
     private lateinit var imageView: ImageView
-    private val PICK_IMAGE_REQUEST = 1
 
     private val firestore = FirebaseFirestore.getInstance()
     private val koleksiFilmRef = firestore.collection("film")
@@ -122,7 +122,6 @@ class TambahFilmActivity : AppCompatActivity() {
                     hapusFilm(filmId)
                 }
             } else {
-                // Tampilkan pesan bahwa hapus tidak dapat dilakukan karena bukan mode edit
                 Log.e("TambahFilmActivity", "Tidak dapat menghapus dalam mode tambah")
             }
         }
@@ -182,28 +181,33 @@ class TambahFilmActivity : AppCompatActivity() {
         edtTahun.setText(film.tahun)
         edtGenre.setText(film.genre)
         edtRating.setText(film.rating)
+        if (film.poster.isNotEmpty()) {
+            Glide.with(this)
+                .load(film.poster)
+                .into(imageView)
+        } else {
+             Glide.with(this)
+                 .load(R.drawable.placeholder_image)
+                 .into(imageView)
+        }
 
-        // TODO: Tambahkan logika untuk menampilkan gambar poster jika diperlukan
     }
     private fun pickImage() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        resultLauncher.launch(intent)
     }
 
     private fun unggahGambarKePenyimpanan(judul: String, sinopsis: String, tahun: String, genre: String, rating: String) {
-        val idFilm = generateFilmId() // Generate a unique ID for the film
+        val idFilm = generateFilmId()
         val imageRef = storageRef.child("posters/$idFilm.jpg")
 
         imageRef.putFile(selectedImageUri)
             .addOnSuccessListener {
-                // Gambar berhasil diunggah, dapatkan URL gambar dari Penyimpanan
                 imageRef.downloadUrl.addOnSuccessListener { uri ->
-                    // Dapatkan URI gambar dan simpan ke Firestore atau lakukan apa yang diperlukan
                     val urlGambar = uri.toString()
 
-                    // Simpan data film ke Firestore
                     val film = Film(
                         id = idFilm,
                         judul = judul,
@@ -246,7 +250,6 @@ class TambahFilmActivity : AppCompatActivity() {
             "genre" to film.genre,
             "rating" to film.rating,
             "poster" to film.poster
-            // tambahkan properti lain sesuai kebutuhan
         )
 
         koleksiFilmRef.document(idFilm)
@@ -279,8 +282,6 @@ class TambahFilmActivity : AppCompatActivity() {
     }
 
     private fun generateFilmId(): String {
-        // Implementasikan logika Anda untuk menghasilkan ID film yang unik (Anda dapat menggunakan timestamp, UUID, dll.)
-        // Untuk sederhananya, saya menggunakan timestamp dalam milidetik
         return System.currentTimeMillis().toString()
     }
 }
