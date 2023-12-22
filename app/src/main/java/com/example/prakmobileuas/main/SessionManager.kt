@@ -45,7 +45,6 @@ class SessionManager(private val context: Context) {
         editor.apply()
     }
 
-    // Fungsi untuk mendapatkan status login
     fun isLoggedIn(): Boolean {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)
     }
